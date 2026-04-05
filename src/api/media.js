@@ -8,6 +8,7 @@ import {
   query,
   updateDoc,
   where,
+  limit,
 } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 
@@ -24,10 +25,10 @@ export async function listMedias() {
 
 export async function filterMedias(
   filters = {},
-  sort = "-created_date",
+  sort = "-created_at",
   limitCount = null,
 ) {
-  let q = collection(db, "episodes");
+  let q = collection(db, "medias");
   const constraints = [];
 
   if (filters.status !== undefined) {
@@ -64,10 +65,7 @@ export async function createMedia(data) {
     type: data.type ?? "video",
     file_url: data.file_url ?? "",
     episode_id: data.episode_id ?? "",
-    tags: (tag.items || []).map((item) => ({
-      tag_id: item.tag_id || "",
-      type: item.type || "",
-    })),
+    tags: data.tags ?? [],
     created_at: now,
     updated_at: now,
   });

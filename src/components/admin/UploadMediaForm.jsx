@@ -13,8 +13,9 @@ import {
 import { Upload, Loader2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { uploadFile } from "../../lib/utils";
-import { createMedia } from "../../api/media";
+import { uploadFile } from "@/lib/utils";
+import { createMedia } from "@/api/media";
+import { convertVideoToMp4 } from "@/lib/videoUtils";
 
 const TAG_OPTIONS = [
   "sports",
@@ -50,13 +51,27 @@ export default function UploadMediaForm({ onSuccess }) {
     if (!form.title) return toast.error("Please enter a title");
 
     setUploading(true);
-    const { file_url } = await uploadFile({ file, location: "media" });
-    await createMedia({ ...form, file_url });
-    toast.success("Media uploaded!");
-    setForm({ title: "", description: "", type: "video", tags: [] });
-    setFile(null);
-    setUploading(false);
-    onSuccess?.();
+    try {
+      let fileToUpload = file;
+
+      if (form.type === "video") {
+        toast.info("Preparing video for upload...");
+      }
+      const { file_url } = await uploadFile({
+        file: fileToUpload || file,
+        location: "media",
+      });
+      await createMedia({ ...form, file_url });
+      toast.success("Media uploaded!");
+      setForm({ title: "", description: "", type: "video", tags: [] });
+      setFile(null);
+      onSuccess?.();
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to upload clip");
+    } finally {
+      setUploading(false);
+    }
   };
 
   return (

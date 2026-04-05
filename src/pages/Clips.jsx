@@ -19,17 +19,37 @@ export default function Clips() {
   const [typeFilter, setTypeFilter] = useState("all");
   const [selected, setSelected] = useState(null);
 
-  const { data: clips = [], isLoading } = useQuery({
+  const {
+    data: clips = [],
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: ["clips"],
-    queryFn: () => filterMedias("-created_date", 100),
+    queryFn: () => filterMedias({}, "-created_at", 100),
   });
+
+  console.log(error);
+
+  if (error) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="text-red-500">
+          Failed to load clips: {error.message}
+        </div>
+      </div>
+    );
+  }
+
+  const q = search.toLowerCase();
 
   const filtered = clips.filter((clip) => {
     const matchesType = typeFilter === "all" || clip.type === typeFilter;
+
     const matchesSearch =
-      clip.title?.toLowerCase().includes(search.toLowerCase()) ||
-      clip.description?.toLowerCase().includes(search.toLowerCase()) ||
-      clip.tags?.some((t) => t.toLowerCase().includes(search.toLowerCase()));
+      (clip.title || "").toLowerCase().includes(q) ||
+      (clip.description || "").toLowerCase().includes(q) ||
+      (clip.tags || []).some((t) => (t || "").toLowerCase().includes(q));
+
     return matchesType && matchesSearch;
   });
 

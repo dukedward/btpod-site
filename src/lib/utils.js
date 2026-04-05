@@ -15,7 +15,7 @@ export function parseLocalDate(dateString) {
   return new Date(year, month - 1, day);
 }
 
-export async function uploadFile(file, location) {
+export async function uploadFile({ file, location }) {
   if (!file) throw new Error("No file provided");
   if (!location) throw new Error("No upload location provided");
 
@@ -28,7 +28,8 @@ export async function uploadFile(file, location) {
   });
 
   const fileUrl = await getDownloadURL(storageRef);
-  return fileUrl;
+  console.log({ file_url: fileUrl });
+  return { file_url: fileUrl };
 }
 
 export function getYouTubeEmbedUrl(url) {
