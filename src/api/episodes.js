@@ -8,6 +8,7 @@ import {
   query,
   updateDoc,
   where,
+  limit,
 } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 
@@ -24,7 +25,7 @@ export async function listEpisodes() {
 
 export async function filterEpisodes(
   filters = {},
-  sort = "-created_date",
+  sort = "-created_at",
   limitCount = null,
 ) {
   let q = collection(db, "episodes");
@@ -64,13 +65,9 @@ export async function createEpisode(data) {
     episode_number: Number(data.episode_number ?? 0),
     date: data.date ?? "Entrees",
     thumbnail_url: data.thumbnail_url ?? "",
-    video_url: data.video_url ?? "",
     audio_url: data.audio_url ?? "",
     youtube_url: data.youtube_url ?? "",
-    tags: (tag.items || []).map((item) => ({
-      tag_id: item.tag_id || "",
-      type: item.type || "",
-    })),
+    tags: data.tags ?? [],
     status: data.status ?? "draft",
     created_at: now,
     updated_at: now,

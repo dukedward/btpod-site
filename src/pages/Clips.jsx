@@ -28,8 +28,6 @@ export default function Clips() {
     queryFn: () => filterMedias({}, "-created_at", 100),
   });
 
-  console.log(error);
-
   if (error) {
     return (
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">

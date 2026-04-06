@@ -28,7 +28,7 @@ export async function uploadFile({ file, location }) {
   });
 
   const fileUrl = await getDownloadURL(storageRef);
-  console.log({ file_url: fileUrl });
+  // console.log({ file_url: fileUrl });
   return { file_url: fileUrl };
 }
 

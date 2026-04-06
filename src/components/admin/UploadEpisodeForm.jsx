@@ -26,6 +26,7 @@ export default function UploadEpisodeForm({ onSuccess }) {
     title: "",
     description: "",
     episode_number: "",
+    audio_url: "",
     youtube_url: "",
     thumbnail_url: "",
     date: "",
@@ -91,6 +92,7 @@ export default function UploadEpisodeForm({ onSuccess }) {
         title: "",
         description: "",
         episode_number: "",
+        audio_url: "",
         youtube_url: "",
         thumbnail_url: "",
         date: "",
@@ -157,19 +159,6 @@ export default function UploadEpisodeForm({ onSuccess }) {
       </div>
 
       <div className="grid sm:grid-cols-2 gap-4">
-        {/* <FileInput
-          label="Thumbnail"
-          accept="image/*"
-          file={thumbnail}
-          onChange={setThumbnail}
-        /> 
-        <FileInput
-          label="Video"
-          accept="video/*"
-          file={video}
-          onChange={setVideo}
-        />
-        */}
         <div className="space-y-2">
           <Label>YouTube Link</Label>
           <Input

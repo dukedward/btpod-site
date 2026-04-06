@@ -4,9 +4,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Shield, Film, Disc } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import UploadMediaForm from "../components/admin/UploadMediaForm";
-import UploadEpisodeForm from "../components/admin/UploadEpisodeForm";
-import { useAuth } from "../lib/AuthContext";
+import { useAuth } from "@/lib/AuthContext";
+import UploadMediaForm from "@/components/admin/UploadMediaForm";
+import UploadEpisodeForm from "@/components/admin/UploadEpisodeForm";
+import YouTubeSyncActions from "@/components/admin/YouTubeSyncActions";
 
 export default function Admin() {
   const navigate = useNavigate();
@@ -45,6 +46,7 @@ export default function Admin() {
             Upload and manage podcast content.
           </p>
         </div>
+        <YouTubeSyncActions />
       </div>
 
       <Tabs defaultValue="media" className="space-y-6">

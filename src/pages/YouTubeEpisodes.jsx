@@ -22,22 +22,33 @@ export default function YouTubeEpisodes() {
   const [sortDir, setSortDir] = useState("desc");
   const [selected, setSelected] = useState(null);
 
-  const { data: episodes = [], isLoading } = useQuery({
+  const {
+    data: episodes = [],
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: ["episodes-yt"],
     queryFn: () =>
-      filterEpisodes({ status: "published" }, "-episode_number", 100),
+      filterEpisodes({ status: "published" }, "-published_at", 200),
   });
+  console.log(episodes);
+  console.log(error);
 
-  const ytEpisodes = YOUTUBE_EPISODES.filter((ep) => ep.youtube_url);
-  // const ytEpisodes = episodes.filter((ep) => ep.youtube_url);
+  let ytEpisodes;
+
+  if (episodes.length === 0) {
+    ytEpisodes = YOUTUBE_EPISODES.filter((ep) => ep.youtube_url);
+  }
+  ytEpisodes = episodes.filter((ep) => ep.youtube_url);
+
+  const q = search.toLowerCase();
 
   const filtered = ytEpisodes
     .filter((ep) => {
-      const q = search.toLowerCase();
       return (
-        ep.title?.toLowerCase().includes(q) ||
-        String(ep.episode_number).includes(q) ||
-        ep.date?.includes(q)
+        (ep.title || "").toLowerCase().includes(q) ||
+        String(ep.episode_number || "1").includes(q) ||
+        (ep.published_at || "")?.includes(q)
       );
     })
     .sort((a, b) => {
@@ -115,12 +126,12 @@ export default function YouTubeEpisodes() {
             Name <SortIcon field="title" />
           </Button>
           <Button
-            variant={sortField === "date" ? "secondary" : "ghost"}
+            variant={sortField === "published_at" ? "secondary" : "ghost"}
             size="sm"
-            onClick={() => toggleSort("date")}
+            onClick={() => toggleSort("published_at")}
             className="gap-1.5 text-xs"
           >
-            Date <SortIcon field="date" />
+            Date <SortIcon field="published_at" />
           </Button>
         </div>
       </div>
